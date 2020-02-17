@@ -1,0 +1,24 @@
+"swagger": "2.0",
+[
+  {
+    "id": 0,
+    "headerId": 0,
+    "documentTypeId": 0,
+    "archived": "2020-02-17T15:56:39.480Z",
+    "fileExtension": "string",
+    "fileSize": 0,
+    "compressedSize": 0,
+    "md5hash": "string",
+    "revision": 0,
+    "signed": 0,
+    "group": 0,
+    "signedPreAuth": true,
+    "approvalState": 0,
+    "reviewedOn": "2020-02-17T15:56:39.480Z",
+    "reviewedById": 0,
+    "isApproved": true,
+    "forceSigned": true,
+    "isAutoDeleted": true,
+    "kept": true
+  }
+]
