@@ -1,24 +1,2094 @@
-"swagger": "2.0",
-[
-  {
-    "id": 0,
-    "headerId": 0,
-    "documentTypeId": 0,
-    "archived": "2020-02-17T15:56:39.480Z",
-    "fileExtension": "string",
-    "fileSize": 0,
-    "compressedSize": 0,
-    "md5hash": "string",
-    "revision": 0,
-    "signed": 0,
-    "group": 0,
-    "signedPreAuth": true,
-    "approvalState": 0,
-    "reviewedOn": "2020-02-17T15:56:39.480Z",
-    "reviewedById": 0,
-    "isApproved": true,
-    "forceSigned": true,
-    "isAutoDeleted": true,
-    "kept": true
-  }
-]
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1.4",
+    "title": "iDealFILE API",
+    "description": "Welcome to the iDealFile API references. This API allows you to create new DealFiles with a document, update existing DealFiles and append new documents to an Existing DealFile.<br/> The API os orgainsed around the REST methodology, and it uses resource-orientated URLS, and common HTTP response codes to indicate API errors. All requests are authenticated using an api-key which can be obtained from your username and password. ",
+    "termsOfService": "None",
+    "contact": {
+      "name": "iDealFILE",
+      "url": "https://idealfile.co.uk/",
+      "email": "contact@idealfile.com"
+    }
+  },
+  "paths": {
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get Access Token",
+        "operationId": "ApiAuthLoginPost",
+        "consumes": [],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "clientCode",
+            "in": "query",
+            "description": "Client Code is required",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "userName",
+            "in": "query",
+            "description": "User Name is required",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Password is required",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/Dealer": {
+      "get": {
+        "tags": [
+          "Dealer"
+        ],
+        "summary": "Get a list of Dealers from the database.",
+        "operationId": "ApiDealerGet",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Dealer"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/document": {
+      "post": {
+        "tags": [
+          "Document"
+        ],
+        "summary": "Append Document to Existing Dealfile",
+        "operationId": "ApiDocumentPost",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "query",
+            "description": "Foreign key of User",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "HeaderId",
+            "in": "query",
+            "description": "Foreign key of Header",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "DocumentTypeId",
+            "in": "query",
+            "description": "Foreign key of DocumentType",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "DealFileOwnerId",
+            "in": "query",
+            "description": "Foreign key of User",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "File",
+            "in": "formData",
+            "description": "Upload File",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Document"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/DocumentType": {
+      "get": {
+        "tags": [
+          "DocumentType"
+        ],
+        "summary": "Get All Document Types",
+        "operationId": "ApiDocumentTypeGet",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DocumentType"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/header": {
+      "get": {
+        "tags": [
+          "Header"
+        ],
+        "summary": "Get Header By Id",
+        "operationId": "ApiHeaderGet",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "HeaderId",
+            "in": "query",
+            "description": "Foreign key of Header",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "UserId",
+            "in": "query",
+            "description": "Foreign key of User",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Header"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Header"
+        ],
+        "summary": "Update existing Header Data",
+        "operationId": "ApiHeaderPut",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "query",
+            "description": "Foreign key of User",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "HeaderId",
+            "in": "query",
+            "description": "Foreign key of Header",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "Marque",
+            "in": "query",
+            "description": "Set Marque",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "RegNo",
+            "in": "query",
+            "description": "Set RegNo",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "CustomerForename",
+            "in": "query",
+            "description": "Set Customer Forename",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "CustomerSurname",
+            "in": "query",
+            "description": "Set Customer Surname",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "StatusId",
+            "in": "query",
+            "description": "Foreign key of Status",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "Order_date",
+            "in": "query",
+            "description": "Set Order Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Enquiry_Number",
+            "in": "query",
+            "description": "Set Enquiry Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Comms_No",
+            "in": "query",
+            "description": "Set Comms No",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Invoice_Date",
+            "in": "query",
+            "description": "Set Invoice Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Stock_Number",
+            "in": "query",
+            "description": "Set Stock Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Chassis_Number",
+            "in": "query",
+            "description": "Set Chassis Number",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Estimated_Delivery_Date",
+            "in": "query",
+            "description": "Set Estimated Delivery Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Manufacturer_Order_Number",
+            "in": "query",
+            "description": "Set Manufacturer Order Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Engine_Number",
+            "in": "query",
+            "description": "Set Engine Number",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Date_Of_Registration",
+            "in": "query",
+            "description": "Set Date Of Registration",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Purchase_Inv_No",
+            "in": "query",
+            "description": "Set Purchase Inv No",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Model_Variant",
+            "in": "query",
+            "description": "Set Model Variant",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "PI_Invoice_Date",
+            "in": "query",
+            "description": "Set PI Invoice Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Order_Number",
+            "in": "query",
+            "description": "Set Order Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Colour_Trim",
+            "in": "query",
+            "description": "Set Colour Trim",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Historical_Delivery_date",
+            "in": "query",
+            "description": "Set Historical Delivery Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Customer_ID",
+            "in": "query",
+            "description": "Set Customer ID",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "OLEV_Ref",
+            "in": "query",
+            "description": "Set OLEV Ref",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Vehicle_Description",
+            "in": "query",
+            "description": "Set Vehicle Description",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Name",
+            "in": "query",
+            "description": "Set Seller Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Invoice_Value",
+            "in": "query",
+            "description": "Set Invoice Value",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Seller_Address_1",
+            "in": "query",
+            "description": "Set Seller Address 1",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Order_Value",
+            "in": "query",
+            "description": "Set Order Value",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Postcode",
+            "in": "query",
+            "description": "Set Postcode",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Address_Line_1",
+            "in": "query",
+            "description": "Set Address Line 1",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Address_Line_2",
+            "in": "query",
+            "description": "Set Address Line 2",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Make",
+            "in": "query",
+            "description": "Set Make",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Dealer_Name",
+            "in": "query",
+            "description": "Set Dealer Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Title",
+            "in": "query",
+            "description": "Set Title",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "First_Name",
+            "in": "query",
+            "description": "Set First Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Agreement_No",
+            "in": "query",
+            "description": "Set Agreement No",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Other_Costs",
+            "in": "query",
+            "description": "Set Other Costs",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "PI_Type",
+            "in": "query",
+            "description": "Set PI Type",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Sales_Type",
+            "in": "query",
+            "description": "Set Sales Type",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Last_Name",
+            "in": "query",
+            "description": "Set Last Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Home_Phone",
+            "in": "query",
+            "description": "Set Home Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Mobile_Phone",
+            "in": "query",
+            "description": "Set Mobile Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Work_Phone",
+            "in": "query",
+            "description": "Set Work Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Preferred_Phone",
+            "in": "query",
+            "description": "Set Preferred Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Email",
+            "in": "query",
+            "description": "Set Email",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Address_2",
+            "in": "query",
+            "description": "Set Seller Address 2",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Address_3",
+            "in": "query",
+            "description": "Set Seller Address 3",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Postcode",
+            "in": "query",
+            "description": "Set Seller Postcode",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Purchase_Price",
+            "in": "query",
+            "description": "Set Purchase Price",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Input_VAT",
+            "in": "query",
+            "description": "Set Input VAT",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "HP_Owing",
+            "in": "query",
+            "description": "Set HP Owing",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Purchase_Invoice_Total",
+            "in": "query",
+            "description": "Set Purchase Invoice Total",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Finance_Company",
+            "in": "query",
+            "description": "Set Finance Company",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Sales_Invoice_Total",
+            "in": "query",
+            "description": "Set Sales Invoice Total",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Header"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Header"
+        ],
+        "summary": "Create new Header",
+        "operationId": "ApiHeaderPost",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "query",
+            "description": "Foreign key of User",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "DealerId",
+            "in": "query",
+            "description": "Foreign key of Dealer",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "HeaderTypeId",
+            "in": "query",
+            "description": "Foreign key of HeaderType",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "Marque",
+            "in": "query",
+            "description": "Set Marque",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "RegNo",
+            "in": "query",
+            "description": "Set RegNo",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "CustomerForename",
+            "in": "query",
+            "description": "Set Customer Forename",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "CustomerSurname",
+            "in": "query",
+            "description": "Set Customer Surname",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "StatusId",
+            "in": "query",
+            "description": "Foreign key of Status",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "Order_date",
+            "in": "query",
+            "description": "Set Order Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Enquiry_Number",
+            "in": "query",
+            "description": "Set Enquiry Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Comms_No",
+            "in": "query",
+            "description": "Set Comms No",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Invoice_Date",
+            "in": "query",
+            "description": "Set Invoice Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Stock_Number",
+            "in": "query",
+            "description": "Set Stock Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Chassis_Number",
+            "in": "query",
+            "description": "Set Chassis Number",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Estimated_Delivery_Date",
+            "in": "query",
+            "description": "Set Estimated Delivery Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Manufacturer_Order_Number",
+            "in": "query",
+            "description": "Set Manufacturer Order Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Engine_Number",
+            "in": "query",
+            "description": "Set Engine Number",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Date_Of_Registration",
+            "in": "query",
+            "description": "Set Date Of Registration",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Purchase_Inv_No",
+            "in": "query",
+            "description": "Set Purchase Inv No",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Model_Variant",
+            "in": "query",
+            "description": "Set Model Variant",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "PI_Invoice_Date",
+            "in": "query",
+            "description": "Set PI Invoice Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Order_Number",
+            "in": "query",
+            "description": "Set Order Number",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Colour_Trim",
+            "in": "query",
+            "description": "Set Colour Trim",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Historical_Delivery_date",
+            "in": "query",
+            "description": "Set Historical Delivery Date",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "Customer_ID",
+            "in": "query",
+            "description": "Set Customer ID",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "OLEV_Ref",
+            "in": "query",
+            "description": "Set OLEV Ref",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Vehicle_Description",
+            "in": "query",
+            "description": "Set Vehicle Description",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Name",
+            "in": "query",
+            "description": "Set Seller Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Invoice_Value",
+            "in": "query",
+            "description": "Set Invoice Value",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Seller_Address_1",
+            "in": "query",
+            "description": "Set Seller Address 1",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Order_Value",
+            "in": "query",
+            "description": "Set Order Value",
+            "required": false,
+            "type": "number",
+            "format": "double"
+          },
+          {
+            "name": "Postcode",
+            "in": "query",
+            "description": "Set Postcode",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Address_Line_1",
+            "in": "query",
+            "description": "Set Address Line 1",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Address_Line_2",
+            "in": "query",
+            "description": "Set Address Line 2",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Make",
+            "in": "query",
+            "description": "Set Make",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Dealer_Name",
+            "in": "query",
+            "description": "Set Dealer Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Title",
+            "in": "query",
+            "description": "Set Title",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "First_Name",
+            "in": "query",
+            "description": "Set First Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Agreement_No",
+            "in": "query",
+            "description": "Set Agreement No",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Other_Costs",
+            "in": "query",
+            "description": "Set Other Costs",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "PI_Type",
+            "in": "query",
+            "description": "Set PI Type",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Sales_Type",
+            "in": "query",
+            "description": "Set Sales Type",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Last_Name",
+            "in": "query",
+            "description": "Set Last Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Home_Phone",
+            "in": "query",
+            "description": "Set Home Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Mobile_Phone",
+            "in": "query",
+            "description": "Set Mobile Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Work_Phone",
+            "in": "query",
+            "description": "Set Work Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Preferred_Phone",
+            "in": "query",
+            "description": "Set Preferred Phone",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Email",
+            "in": "query",
+            "description": "Set Email",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Address_2",
+            "in": "query",
+            "description": "Set Seller Address 2",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Address_3",
+            "in": "query",
+            "description": "Set Seller Address 3",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Seller_Postcode",
+            "in": "query",
+            "description": "Set Seller Postcode",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Purchase_Price",
+            "in": "query",
+            "description": "Set Purchase Price",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Input_VAT",
+            "in": "query",
+            "description": "Set Input VAT",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "HP_Owing",
+            "in": "query",
+            "description": "Set HP Owing",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Purchase_Invoice_Total",
+            "in": "query",
+            "description": "Set Purchase Invoice Total",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Finance_Company",
+            "in": "query",
+            "description": "Set Finance Company",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Sales_Invoice_Total",
+            "in": "query",
+            "description": "Set Sales Invoice Total",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "Qty",
+            "in": "query",
+            "description": "Set Qty to Create Batch",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "TriggerDocumentTypeId",
+            "in": "query",
+            "description": "Document Type ID of Trigger document",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "File",
+            "in": "formData",
+            "description": "Upload File",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Header"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "409": {
+            "description": "Conflict in RegNo",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "format": "int32",
+                "type": "integer"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/header/Search": {
+      "post": {
+        "tags": [
+          "Header"
+        ],
+        "summary": "Search Header",
+        "operationId": "ApiHeaderSearchPost",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "searchObject",
+            "in": "body",
+            "description": "Header Fields with Values to Search",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "format": "int32",
+                "type": "integer"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/HeaderStatus": {
+      "get": {
+        "tags": [
+          "HeaderStatus"
+        ],
+        "summary": "Get All Header Status",
+        "operationId": "ApiHeaderStatusGet",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HeaderStatus"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/HeaderType": {
+      "get": {
+        "tags": [
+          "HeaderType"
+        ],
+        "summary": "Get All Header Type",
+        "operationId": "ApiHeaderTypeGet",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HeaderType"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/process/file": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "Set Process File Data",
+        "operationId": "ApiProcessFilePost",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "fileUniqueId",
+            "in": "query",
+            "description": "Set the File Unique Id for update particular file log",
+            "required": false,
+            "type": "string",
+            "default": ""
+          },
+          {
+            "name": "File",
+            "in": "formData",
+            "description": "Upload File",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/StagingResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/process/Staging": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "Process the Staging Entry",
+        "operationId": "ApiProcessStagingPost",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "StagingId",
+            "in": "query",
+            "description": "Foreign key of Staging",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Header"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/User": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get All Users",
+        "operationId": "ApiUserGet",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    },
+    "/api/User/GetAllByDealerId": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get All Users by Dealer",
+        "operationId": "ApiUserGetAllByDealerIdGet",
+        "consumes": [],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "DealerId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized Request"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AuthResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expiration": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "errorMsg": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "Dealer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "dealerName": {
+          "type": "string"
+        },
+        "deleted": {
+          "type": "boolean"
+        },
+        "dealerGroupId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "isAuditEnable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "IFormFile": {
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "contentDisposition": {
+          "type": "string",
+          "readOnly": true
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "readOnly": true
+        },
+        "length": {
+          "format": "int64",
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "fileName": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "Document": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "headerId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "documentTypeId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "archived": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "fileExtension": {
+          "type": "string"
+        },
+        "fileSize": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "compressedSize": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "md5hash": {
+          "type": "string"
+        },
+        "revision": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "signed": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "group": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "signedPreAuth": {
+          "type": "boolean"
+        },
+        "approvalState": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "reviewedOn": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "reviewedById": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "isApproved": {
+          "type": "boolean"
+        },
+        "forceSigned": {
+          "type": "boolean"
+        },
+        "isAutoDeleted": {
+          "type": "boolean"
+        },
+        "kept": {
+          "type": "boolean"
+        }
+      }
+    },
+    "DocumentType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "documentTypeName": {
+          "type": "string"
+        },
+        "deleted": {
+          "type": "boolean"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "hasImage": {
+          "type": "boolean"
+        },
+        "overrideButtonText": {
+          "type": "string"
+        },
+        "tickText": {
+          "type": "string"
+        },
+        "autoDeletion": {
+          "type": "boolean"
+        },
+        "daysToWarning": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "daysToDeletion": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "isHardDelete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Header": {
+      "type": "object",
+      "properties": {
+        "headerId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "dealerId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "headerTypeId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "userId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "Archived": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "marque": {
+          "type": "string"
+        },
+        "regNo": {
+          "type": "string"
+        },
+        "CustomerForename": {
+          "type": "string"
+        },
+        "CustomerSurname": {
+          "type": "string"
+        },
+        "Comms_No": {
+          "type": "string"
+        },
+        "Chassis_Number": {
+          "type": "string"
+        },
+        "Engine_Number": {
+          "type": "string"
+        },
+        "Model_Variant": {
+          "type": "string"
+        },
+        "Colour_Trim": {
+          "type": "string"
+        },
+        "OLEV_Ref": {
+          "type": "string"
+        },
+        "Vehicle_Description": {
+          "type": "string"
+        },
+        "Seller_Name": {
+          "type": "string"
+        },
+        "Seller_Address_1": {
+          "type": "string"
+        },
+        "Postcode1": {
+          "type": "string"
+        },
+        "Address_Line_1": {
+          "type": "string"
+        },
+        "Address_Line_2": {
+          "type": "string"
+        },
+        "Postcode": {
+          "type": "string"
+        },
+        "Make": {
+          "type": "string"
+        },
+        "Dealer_Name": {
+          "type": "string"
+        },
+        "Order_date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "Invoice_Date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "Estimated_Delivery_Date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "Date_Of_Registration": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "PI_Invoice_Date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "Order_Number": {
+          "format": "double",
+          "type": "number"
+        },
+        "Stock_Number": {
+          "format": "double",
+          "type": "number"
+        },
+        "Manufacturer_Order_Number": {
+          "format": "double",
+          "type": "number"
+        },
+        "Purchase_Inv_No": {
+          "format": "double",
+          "type": "number"
+        },
+        "Enquiry_Number": {
+          "format": "double",
+          "type": "number"
+        },
+        "StatusId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "LastStatusChange": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "BatchId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "Title": {
+          "type": "string"
+        },
+        "First_Name": {
+          "type": "string"
+        },
+        "Agreement_No": {
+          "type": "string"
+        },
+        "Other_Costs": {
+          "type": "string"
+        },
+        "PI_Type": {
+          "type": "string"
+        },
+        "Sales_Type": {
+          "type": "string"
+        },
+        "Last_Name": {
+          "type": "string"
+        },
+        "Home_Phone": {
+          "type": "string"
+        },
+        "Mobile_Phone": {
+          "type": "string"
+        },
+        "Work_Phone": {
+          "type": "string"
+        },
+        "Preferred_Phone": {
+          "type": "string"
+        },
+        "Email": {
+          "type": "string"
+        },
+        "Seller_Address_2": {
+          "type": "string"
+        },
+        "Seller_Address_3": {
+          "type": "string"
+        },
+        "Seller_Postcode": {
+          "type": "string"
+        },
+        "Customer_ID": {
+          "format": "double",
+          "type": "number"
+        },
+        "documents": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Document"
+          }
+        },
+        "templates": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Document"
+          }
+        }
+      }
+    },
+    "HeaderStatus": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "headerStatusName": {
+          "type": "string"
+        },
+        "warningDays": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "systemName": {
+          "type": "string"
+        },
+        "inclSalesExecDash": {
+          "type": "boolean"
+        },
+        "inclManagerDash": {
+          "type": "boolean"
+        },
+        "deleted": {
+          "type": "boolean"
+        },
+        "allowAppend": {
+          "type": "boolean"
+        },
+        "displayOrder": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "HeaderType": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "headerBaseTypeId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "headerTypeName": {
+          "type": "string"
+        },
+        "group1": {
+          "type": "string"
+        },
+        "group2": {
+          "type": "string"
+        },
+        "useRegInPk": {
+          "type": "boolean"
+        },
+        "headerTypeDocumentType": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HeaderTypeDocumentType"
+          }
+        }
+      }
+    },
+    "HeaderTypeDocumentType": {
+      "type": "object",
+      "properties": {
+        "headerTypeId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "documentTypeId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "optional": {
+          "type": "boolean"
+        },
+        "displayOrder": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "group": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "allowBatchFunctions": {
+          "type": "boolean"
+        },
+        "thirdPartyProvider": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "reqApproval": {
+          "type": "boolean"
+        },
+        "allowSetNa": {
+          "type": "boolean"
+        },
+        "templateFilename": {
+          "type": "string"
+        },
+        "autoCreate": {
+          "type": "boolean"
+        },
+        "isEssentialForAudit": {
+          "type": "boolean"
+        },
+        "reqForSoldToTrade": {
+          "type": "boolean"
+        },
+        "triggerDocument": {
+          "type": "boolean"
+        },
+        "forceSignAllowed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "StagingResponse": {
+      "type": "object",
+      "properties": {
+        "stagingId": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "name": "Authorization",
+      "in": "header",
+      "type": "apiKey",
+      "description": "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ]
+}
